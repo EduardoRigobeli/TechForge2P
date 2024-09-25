@@ -21,6 +21,7 @@ public class CenaDAO {
         if(rs.next()) {//next passa para próxima linha do Banco de Dados resultando em VERDADEIRO
             cena.setIdCenas(rs.getInt("id_cena"));//vai retornar o id da cena
             cena.setCenas(rs.getString("cenas"));
+            cena.setItens(itensDAO.findItensByScene(cena));
         }
         return cena;
     }
@@ -35,7 +36,7 @@ public class CenaDAO {
 
     public static List<Cenas> findAll() throws SQLException {
         Connection conn = Mysql.getConnection();
-        String sql = "select * from cenas";
+        String sql = "select * from cenas;";
         PreparedStatement stmt = conn.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
 

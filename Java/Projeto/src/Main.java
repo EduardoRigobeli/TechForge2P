@@ -1,38 +1,34 @@
-import model.Cenas;
-import model.Item;
+
+import Controller.AntesDoJogoController;
+import com.google.gson.Gson;
+import model.Console;
 import model.Save;
 import repository.CenaDAO;
 import repository.SaveDAO;
-import repository.itensDAO;
+import spark.Spark;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
 public class Main {
+    private static final Gson Gson = new Gson();
     public static void main(String[] args) {
         try {
-//            Cenas cenas = CenaDAO.findCenasById(1);
-//            System.out.println(cenas.toString());
-//
-//            List<Item> itens = itensDAO.findItensByScene(cenas);
-//            System.out.println("itens:"+ itens);
-
-            List<Cenas> cenas = CenaDAO.findAll();
-            System.out.println("Cenas antes do insert");
-            System.out.println(cenas);
-
-            Cenas novaCena = new Cenas();
-            novaCena.setCenas("Nova cena que foi inserida pelo java brabíssimo");
-            CenaDAO.insertCena(novaCena);
-
-            cenas = CenaDAO.findAll();
-            System.out.println("Cenas depois do insert");
-            System.out.println(cenas);
-
             Save save = SaveDAO.novoJogo();
-            System.out.println(save.getCenas().getCenas());
+            Console console = new Console();
+            String saveJson = Gson.toJson(save);
+            Spark.get("/", (req,res) -> saveJson);
 
-        } catch (SQLException e) {
+            Spark.get("cena/:id", (req,res) -> {
+                Integer idCena = Integer.parseInt(req.params(":id"));
+                return Gson.toJson(CenaDAO.findCenasById(idCena));
+            });
+
+            Spark.get("/:comando", new AntesDoJogoController());
+
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
