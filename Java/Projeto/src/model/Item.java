@@ -3,7 +3,7 @@ package model;
 public class Item {
     private Integer idItem;
     private String Itens;
-    private Cenas idCena;
+    private Integer idCena;
 
     public Integer getIdItem() {
         return idItem;
@@ -21,11 +21,11 @@ public class Item {
         Itens = itens;
     }
 
-    public Cenas getIdCena() {
+    public Integer getIdCena() {
         return idCena;
     }
 
-    public void setIdCena(Cenas idCena) {
+    public void setIdCena(Integer idCena) {
         this.idCena = idCena;
     }
 
